@@ -1,0 +1,37 @@
+import lights
+from motor import Motor
+from Arduino import Arduino
+
+
+arduino = Arduino()
+motor = Motor()
+
+
+def get_distance(file_distance='distance.txt'):
+    with open(file_distance) as file:
+        distance = float(file.read())
+    return distance
+
+
+def servo(angle=0):
+    angle = int(angle)
+    arduino.servo_write(angle)    
+    
+
+def accumulate():
+    voltage = arduino.get_acc()
+    return voltage
+
+
+try:
+    while True:
+        distance = get_distance()
+        if distance > 60:
+             motor.go(60)
+        else:
+             motor.go(0)
+
+
+finally:
+     motor.clean()
+
